@@ -1,0 +1,21 @@
+name: Publish runtime v0.1.0
+on:
+  push:
+    branches: [publish-runtime-v0.1.0]
+    paths: ['.github/workflows/publish-runtime.yml']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: pinhaofan1/shuzhi
+          RELEASE_COMMIT: 015602ef6bff21ce96e5865406e51ddddc9d3e80
+        run: |
+          if gh release view v0.1.0 >/dev/null 2>&1; then exit 0; fi
+          gh release create v0.1.0 --target "$RELEASE_COMMIT" \
+            --title 'WeChat Canvas and Lua Runtime v0.1.0' \
+            --notes 'Unminified JavaScript Canvas adapter and Lua runtime with Fengari 0.1.5 and sprintf-js 1.1.3. The release source archive includes the runtime files and all license notices.'
